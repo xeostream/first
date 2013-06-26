@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-form django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView
 from polls import views
 
 urlpatterns = patterns('',
