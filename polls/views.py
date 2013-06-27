@@ -6,7 +6,7 @@ from django.shortcuts import *
 from django.core.urlresolvers import reverse
 
 from polls.models import Poll, Choice
-'''
+
 def index(request):
 	latest_poll_list = Poll.objects.order_by('-pud_date')[:5]
 	output = ','.join([p.question for p in latest_poll_list])
@@ -31,7 +31,7 @@ def results(request, poll_id):
 	poll = get_object_or_404(Poll, pk=poll_id)
 	return render(request, 'polls/results.html', {'poll': poll})
 	# return HttpResponse("You're looking at the results of poll %s." % poll_id)
-'''
+
 def vote(request, poll_id):
 	p = get_object_or_404(Poll, pk=poll_id)
 	try:
