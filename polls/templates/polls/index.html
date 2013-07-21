@@ -1,9 +1,79 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+</script>
 {% if latest_poll_list %}
 	<ul>
 	{% for poll in latest_poll_list %}
-		<li><a href="{% url polls:detail poll.id %}">{{ poll.question }}</a></li>
+		<li><a href="/polls/{{ poll.id }}/">{{ poll.question }}</a></li>
 	{% endfor %}
 	</ul>
 {% else %}
 	<p>No polls are available.</p>
 {% endif %}
+<a href="/polls/">polls</a>
+<div id='print'></div>
+<button onclick="test();">post</button>
+<script>
+	var list = {};
+	var res = null;
+	function test()
+	{
+		res = $.ajax({
+			url: '/polls/',
+			data: {'fuck':'fuck'},
+			type: 'POST',
+			datatype:'JSON',
+			abortOnRetry: 'true',
+			success:function(data) {
+				document.getElementById('print').innerHTML += '1'
+			}
+		});
+	}
+
+	$.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+  if ( options.abortOnRetry ) {
+    if ( list[ options.url ] ) {
+    	//alert('success');
+      list[ options.url ].abort();
+      list[options.url] = jqXHR;
+    }
+    list[ options.url ] = jqXHR;
+  }
+});
+
+	$(document).ajaxSend(function(event, xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function sameOrigin(url) {
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+    function safeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+});
+</script>

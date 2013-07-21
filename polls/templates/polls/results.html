@@ -1,3 +1,5 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+</script>
 <h1>{{ poll.question }}</h1>
 
 <ul>
@@ -6,4 +8,4 @@
 {% endfor %}
 </ul>
 
-<a href="{% url polls:detail poll.id %}">Vote again?</a>
+<a href="/polls/{{ poll.id }}/">Vote again?</a>

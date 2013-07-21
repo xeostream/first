@@ -8,6 +8,10 @@ from django.core.urlresolvers import reverse
 from polls.models import Poll, Choice
 
 def index(request):
+	ajax = request.POST.get('fuck','')
+	print '-'*10
+	print ajax
+	print '-'*10
 	latest_poll_list = Poll.objects.order_by('-pud_date')[:5]
 	output = ','.join([p.question for p in latest_poll_list])
 	"""
