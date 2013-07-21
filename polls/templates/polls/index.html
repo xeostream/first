@@ -24,15 +24,17 @@
 			datatype:'JSON',
 			abortOnRetry: 'true',
 			success:function(data) {
-				document.getElementById('print').innerHTML += '1'
+				if (list["/polls/"]) {
+					list["/polls/"] = null;
+				}
 			}
 		});
 	}
 
 	$.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+		alert(options.url);
   if ( options.abortOnRetry ) {
     if ( list[ options.url ] ) {
-    	//alert('success');
       list[ options.url ].abort();
       list[options.url] = jqXHR;
     }
